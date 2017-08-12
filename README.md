@@ -1,4 +1,5 @@
 # Argonaut [![GoDoc](https://godoc.org/github.com/ghetzel/argonaut?status.svg)](https://godoc.org/github.com/ghetzel/argonaut)
+A library for generating and parsing complex command line invocations in a structured manner.
 
 ## Overview
 
