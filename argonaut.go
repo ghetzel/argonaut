@@ -200,7 +200,14 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 							// only non-nil values expand into [-]key=value arguments
 							if v != nil {
 								kv += strings.Join(key, tag.KeyPartJoiner)
-								kv += tag.Joiner
+
+								if tag.Joiner == separator {
+									command = append(command, kv)
+									kv = ``
+								} else {
+									kv += tag.Joiner
+								}
+
 								kv += stringutil.MustString(v)
 							}
 
@@ -291,27 +298,19 @@ func fmtCommandWord(in string) string {
 }
 
 func opt(command []string, tag *argonautTag, optname string, values ...interface{}) []string {
-	cmdAppend := ``
-
 	if !tag.SkipName {
 		if tag.LongOption && !tag.ForceShort {
-			cmdAppend = `--` + optname
+			command = append(command, `--`+optname)
 		} else {
-			cmdAppend = `-` + optname
+			command = append(command, `-`+optname)
 		}
 	}
 
-	for i, v := range values {
-		vS := stringutil.MustString(v)
-
-		if cmdAppend != `` {
-			vS = tag.DelimiterAt(i) + vS
-		}
-
-		cmdAppend += vS
+	for _, v := range values {
+		command = append(command, stringutil.MustString(v))
 	}
 
-	return append(command, cmdAppend)
+	return command
 }
 
 func parseTag(tag string) (argonautTag, error) {
