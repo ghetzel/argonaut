@@ -6,21 +6,22 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type Ls struct {
-	All       bool     `argonaut:"all|a"`
-	AlmostAll bool     `argonaut:"A"`
-	BlockSize int      `argonaut:"block-size,long,required"`
-	Format    string   `argonaut:"format,long,delimiters=[=]"`
-	Paths     []string `argonaut:",positional"`
+type ls struct {
+	Command       ArgonautCommand `argonaut:"ls"`
+	All           bool            `argonaut:"all|a"`
+	BlockSize     int             `argonaut:"block-size,long"`
+	LongFormat    bool            `argonaut:"l"`
+	HumanReadable bool            `argonaut:"human-readable|h"`
+	Paths         []string        `argonaut:",positional"`
 }
 
 func TestBasicMarshal(t *testing.T) {
 	assert := require.New(t)
 
-	output, err := Marshal(&Ls{
-		All:       true,
-		AlmostAll: true,
-		Format:    `across`,
+	output, err := Marshal(&ls{
+		All:           true,
+		LongFormat:    true,
+		HumanReadable: true,
 		Paths: []string{
 			`/foo`,
 			`/bar/*.txt`,
@@ -29,7 +30,8 @@ func TestBasicMarshal(t *testing.T) {
 	})
 
 	assert.NoError(err)
-	assert.Equal(`ls --all -A --block-size 0 --format=across /foo /bar/*.txt /baz/`, string(output))
+	assert.Equal(`ls --all -l --human-readable /foo /bar/*.txt /baz/`, string(output))
+	t.Logf(string(output))
 }
 
 // hateful complexity test 1: ffmpeg

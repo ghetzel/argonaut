@@ -64,6 +64,16 @@ func Parse(v interface{}) ([]string, error) {
 	}
 }
 
+// Parses a given struct and returns slice of strings that can be used with os/exec. Will panic if
+// an error occurs.
+func MustParse(v interface{}) []string {
+	if command, err := Parse(v); err == nil {
+		return command
+	} else {
+		panic(err.Error())
+	}
+}
+
 // Parses the given value and returns a new *exec.Cmd instance
 func Command(v interface{}) (*exec.Cmd, error) {
 	var cmd string
@@ -94,6 +104,15 @@ func Command(v interface{}) (*exec.Cmd, error) {
 	}
 
 	return exec.Command(cmd, args...), nil
+}
+
+// Parses the given value and returns a new *exec.Cmd instance.  Will panic if an error occurs.
+func MustCommand(v interface{}) *exec.Cmd {
+	if command, err := Command(v); err == nil {
+		return command
+	} else {
+		panic(err.Error())
+	}
 }
 
 func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
