@@ -18,8 +18,8 @@ var DefaultCommandWordSeparator = `-`
 var DefaultArgumentKeyPartJoiner = `.`
 var DefaultArgumentKeyValueJoiner = DefaultArgumentDelimiter
 
-type ArgonautCommand string
-type ArgonautArgument string
+type CommandName string
+type ArgName string
 
 type argonautTag struct {
 	Options               []string
@@ -144,9 +144,9 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 
 			// arrify and iterate through the field value
 			for _, value := range sliceutil.Sliceify(field.Value()) {
-				// ArgonautCommand: specifies a named command and options for processing peer fields
+				// CommandName: specifies a named command and options for processing peer fields
 				// ---------------------------------------------------------------------------------
-				if _, ok := value.(ArgonautCommand); ok {
+				if _, ok := value.(CommandName); ok {
 					// specify how the final command should be joined together when marshalling
 					if len(tag.Delimiters) > 0 {
 						separator = tag.Delimiters[0]
@@ -162,8 +162,8 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 						command = []string{fmtCommandWord(field.Name())}
 					}
 
-				} else if _, ok := value.(ArgonautArgument); ok {
-					// ArgonautArgument: specifies a named argument from within a nested struct
+				} else if _, ok := value.(ArgName); ok {
+					// ArgName: specifies a named argument from within a nested struct
 					// ---------------------------------------------------------------------------------
 
 					var prefix string

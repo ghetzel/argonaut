@@ -11,12 +11,12 @@ Let's look at how you would model the standard coreutils `ls` command.  Here is 
 
 ```golang
 type ls struct {
-    Command       ArgonautCommand `argonaut:"ls"`
-    All           bool            `argonaut:"all|a"`
-    BlockSize     int             `argonaut:"block-size,long"`
-    LongFormat    bool            `argonaut:"l"`
-    HumanReadable bool            `argonaut:"human-readable|h"`
-    Paths         []string        `argonaut:",positional"`
+    Command       argonaut.CommandName `argonaut:"ls"`
+    All           bool                 `argonaut:"all|a"`
+    BlockSize     int                  `argonaut:"block-size,long"`
+    LongFormat    bool                 `argonaut:"l"`
+    HumanReadable bool                 `argonaut:"human-readable|h"`
+    Paths         []string             `argonaut:",positional"`
 }
 ```
 

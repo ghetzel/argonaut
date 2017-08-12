@@ -7,12 +7,12 @@ import (
 )
 
 type ls struct {
-	Command       ArgonautCommand `argonaut:"ls"`
-	All           bool            `argonaut:"all|a"`
-	BlockSize     int             `argonaut:"block-size,long"`
-	LongFormat    bool            `argonaut:"l"`
-	HumanReadable bool            `argonaut:"human-readable|h"`
-	Paths         []string        `argonaut:",positional"`
+	Command       CommandName `argonaut:"ls"`
+	All           bool        `argonaut:"all|a"`
+	BlockSize     int         `argonaut:"block-size,long"`
+	LongFormat    bool        `argonaut:"l"`
+	HumanReadable bool        `argonaut:"human-readable|h"`
+	Paths         []string    `argonaut:",positional"`
 }
 
 func TestBasicMarshal(t *testing.T) {

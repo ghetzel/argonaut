@@ -29,15 +29,15 @@ type GlobalOptions struct {
 }
 
 type CodecOptions struct {
-	ArgName    ArgonautArgument `argonaut:"codec,short"`
-	Stream     string           `argonaut:",suffixprev,delimiters=[:]"`
-	Codec      string           `argonaut:",skipname"`
-	Parameters []string         `argonaut:",positional"`
+	ArgName    ArgName  `argonaut:"codec,short"`
+	Stream     string   `argonaut:",suffixprev,delimiters=[:]"`
+	Codec      string   `argonaut:",skipname"`
+	Parameters []string `argonaut:",positional"`
 }
 
 type MetadataValue struct {
-	Metadata   ArgonautArgument `argonaut:",short"`
-	Metastream string           `argonaut:",suffixprev,delimiters=[:]"`
+	Metadata   ArgName `argonaut:",short"`
+	Metastream string  `argonaut:",suffixprev,delimiters=[:]"`
 	Key        string
 	Value      interface{}
 }
@@ -66,8 +66,8 @@ type OutputOptions struct {
 }
 
 type FFMPEG struct {
-	Command ArgonautCommand `argonaut:"ffmpeg"`
-	Global  *GlobalOptions  `argonaut:",label=global_options"`
-	Input   *InputOptions   `argonaut:",label=input_file_options"`
-	Output  *OutputOptions  `argonaut:",label=output_file_options"`
+	Command CommandName    `argonaut:"ffmpeg"`
+	Global  *GlobalOptions `argonaut:",label=global_options"`
+	Input   *InputOptions  `argonaut:",label=input_file_options"`
+	Output  *OutputOptions `argonaut:",label=output_file_options"`
 }
