@@ -50,3 +50,9 @@ fmt.Println(strings.Join(argonaut.MustParse(ls_alh), `|`))
 stdout, err := argonaut.MustCommand(ls_alh).Output()
 // Returns: the output of the command, <nil> (or non-nil if the command failed)
 ```
+
+## Rationale
+
+This approach is useful in sitations where you are working with incredibly complex commands whose argument structures are very dynamic and nuanced.  Some examples that come to mind are [`ffmpeg`](https://ffmpeg.org/ffmpeg.html), [`vlc`](https://wiki.videolan.org/VLC-1-1-x_command-line_help/), and [`uwsgi`](https://uwsgi-docs.readthedocs.io/en/latest/).
+
+In each circumstance, a fully-featured library exists that can be natively integrated with, but the sheer number of options implemented in the CLI tools and the logic therein that you would need to replicate makes shelling out a very attractive option.  But building the command line is often itself a non-trivial task.  Argonaut was built to make this proccess easier.
