@@ -240,7 +240,7 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 				} else if tag.SuffixPrevious {
 					// SuffixPrevious: modifies the last argument on the command stack with the current value
 					// ---------------------------------------------------------------------------------
-					if len(command) > 0 {
+					if len(command) > 0 && (!typeutil.IsZero(value) || tag.Required) {
 						last := command[len(command)-1]
 
 						last += tag.DelimiterAt(0)
