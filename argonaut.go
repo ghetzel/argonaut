@@ -1,5 +1,12 @@
 package argonaut
 
+/*
+Argonaut is a library that makes working with complex command line utilities simpler. Instead of
+using complex application logic and string slices for building up command line invocations, you can
+model shell commands using Golang structs, then using Argonaut, marshal those structs into valid
+strings that can be used to shell out.
+*/
+
 import (
 	"fmt"
 	"os/exec"

@@ -51,6 +51,39 @@ stdout, err := argonaut.MustCommand(ls_alh).Output()
 // Returns: the output of the command, <nil> (or non-nil if the command failed)
 ```
 
+## Using the `argonaut` Struct Tag
+
+The `argonaut:` tag can be used to tell Argonaut how fields in a struct should be converted into command line arguments.  Except for positional arguments, the first part of the tag value (everything before the first comma) specifies the parameter name as it will appear in the generated command line.  Both long (e.g.: `--argument`) and short (e.g.: `-a`) labels are supported.  If both variants are valid, they should be separated by a pipe (`|`), with the default form occurring first (e.g.: `argument|a`).
+
+Everything after the first comma represents additional configuration used to fine-tune the presentation of the parameter.
+
+| Configuration | Description
+| ------------- |
+| `long`        | The parameter only supports a long-form argument. |
+| `short`       | The parameter only supports a short-form argument. |
+| `positional`  | The field represents a positional argument.  Can be a slice type. |
+| `required`    | The parameter must be specified (cannot contain a zero value). |
+| `suffixprev`  | The value of the field is not a standalone parameter, but is instead a modifier for the parameter immediately preceding the field.  The value will be concatenated with the previous parameter name, joined using the value of the `delimiters` configuration item.  The `delimiter` defaults to a single space (" "). |
+| `delimiters=[...]` | Specifies a sequence of characters that should be used to join parameter name modifiers (specified by `suffixprev`).  See below for an example. |
+
+
+### Example Usage for `suffixprev` and `delimiters`
+
+```
+type ComplexThing struct {
+    Command    argonaut.CommandName `argonaut:"mycmd"`
+    Filter     string               `argonaut:"filter"`
+    FilterType string               `argonaut:",suffixprev,delimiters=[:]`
+}
+
+argonaut.MustCommand(ComplexThing{
+    Filter:     `testing`,
+    FilterType: `audio`,
+})
+
+// Returns: "mycmd --filter:audio testing"
+```
+
 ## Rationale
 
 This approach is useful in sitations where you are working with incredibly complex commands whose argument structures are very dynamic and nuanced.  Some examples that come to mind are [`ffmpeg`](https://ffmpeg.org/ffmpeg.html), [`vlc`](https://wiki.videolan.org/VLC-1-1-x_command-line_help/), and [`uwsgi`](https://uwsgi-docs.readthedocs.io/en/latest/).
