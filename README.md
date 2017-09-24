@@ -57,7 +57,7 @@ The `argonaut:` tag can be used to tell Argonaut how fields in a struct should b
 
 Everything after the first comma represents additional configuration used to fine-tune the presentation of the parameter.
 
-| Configuration Item | Description               |
+| Configuration      | Description               |
 | ------------------ | ------------------------- |
 | `long`             | The parameter only supports a long-form argument. |
 | `short`            | The parameter only supports a short-form argument. |
