@@ -57,13 +57,13 @@ The `argonaut:` tag can be used to tell Argonaut how fields in a struct should b
 
 Everything after the first comma represents additional configuration used to fine-tune the presentation of the parameter.
 
-| Configuration | Description
-| ------------- |
-| `long`        | The parameter only supports a long-form argument. |
-| `short`       | The parameter only supports a short-form argument. |
-| `positional`  | The field represents a positional argument.  Can be a slice type. |
-| `required`    | The parameter must be specified (cannot contain a zero value). |
-| `suffixprev`  | The value of the field is not a standalone parameter, but is instead a modifier for the parameter immediately preceding the field.  The value will be concatenated with the previous parameter name, joined using the value of the `delimiters` configuration item.  The `delimiter` defaults to a single space (" "). |
+| Configuration      | Description               |
+| ------------------ | ------------------------- |
+| `long`             | The parameter only supports a long-form argument. |
+| `short`            | The parameter only supports a short-form argument. |
+| `positional`       | The field represents a positional argument.  Can be a slice type. |
+| `required`         | The parameter must be specified (cannot contain a zero value). |
+| `suffixprev`       | The value of the field is not a standalone parameter, but is instead a modifier for the parameter immediately preceding the field.  The value will be concatenated with the previous parameter name, joined using the value of the `delimiters` configuration item.  The `delimiter` defaults to a single space (" "). |
 | `delimiters=[...]` | Specifies a sequence of characters that should be used to join parameter name modifiers (specified by `suffixprev`).  See below for an example. |
 
 
