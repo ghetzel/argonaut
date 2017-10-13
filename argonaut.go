@@ -346,8 +346,6 @@ func opt(command []string, tag *argonautTag, optname string, values ...interface
 	}
 
 	if prejoin && len(argset) >= 2 {
-		fmt.Printf("%+v joiner %q\n", argset, tag.Joiner)
-
 		command = append(command, argset[0]+tag.Joiner+argset[1])
 		command = append(command, argset[2:]...)
 	} else {
