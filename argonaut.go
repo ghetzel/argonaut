@@ -158,19 +158,28 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 				// CommandName: specifies a named command and options for processing peer fields
 				// ---------------------------------------------------------------------------------
 				if _, ok := value.(CommandName); ok {
+					valueS := fmt.Sprintf("%v", value)
+
 					// specify how the final command should be joined together when marshalling
 					if len(tag.Delimiters) > 0 {
 						separator = tag.Delimiters[0]
 					}
 
-					if len(tag.Label) > 0 {
-						// prefer label
+					if valueS != `` {
+						// prefer value of the field
+						command = []string{valueS}
+
+					} else if len(tag.Label) > 0 {
+						// fallback to label value
 						command = []string{tag.Label}
+
 					} else if primaryOpt != `` {
 						// fallback to tag value
 						command = []string{primaryOpt}
+
 					} else {
 						command = []string{fmtCommandWord(field.Name())}
+
 					}
 
 				} else if _, ok := value.(ArgName); ok {
