@@ -137,6 +137,10 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 	separator := DefaultArgumentDelimiter
 
 	for _, field := range input.Fields() {
+		if !field.IsExported() {
+			continue
+		}
+
 		if tag, err := parseTag(field.Tag(`argonaut`)); err == nil {
 			var primaryOpt string
 
