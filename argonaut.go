@@ -137,7 +137,7 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 	separator := DefaultArgumentDelimiter
 
 	for _, field := range input.Fields() {
-		if !field.IsExported() {
+		if !field.IsExported() || field.Tag(`argonaut`) == `-` {
 			continue
 		}
 
