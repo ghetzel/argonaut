@@ -135,13 +135,18 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 	}
 
 	separator := DefaultArgumentDelimiter
+	defaults := argonautTag{
+		Delimiters:    []string{DefaultArgumentDelimiter},
+		KeyPartJoiner: DefaultArgumentKeyPartJoiner,
+		Joiner:        DefaultArgumentKeyValueJoiner,
+	}
 
 	for _, field := range input.Fields() {
 		if !field.IsExported() || field.Tag(`argonaut`) == `-` {
 			continue
 		}
 
-		if tag, err := parseTag(field.Tag(`argonaut`)); err == nil {
+		if tag, err := parseTag(field.Tag(`argonaut`), &defaults); err == nil {
 			var primaryOpt string
 
 			// for marshaling purposes, the option name is determined as:
@@ -164,6 +169,12 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 					if len(tag.Delimiters) > 0 {
 						separator = tag.Delimiters[0]
 					}
+
+					// if these tags weren't explicitly set, then this is effectively a no-op
+					// if they were set, the defaults are updated here to reflect that
+					defaults.Delimiters = tag.Delimiters
+					defaults.Joiner = tag.Joiner
+					defaults.KeyPartJoiner = tag.KeyPartJoiner
 
 					if valueS != `` {
 						// prefer value of the field
@@ -318,22 +329,35 @@ func fmtCommandWord(in string) string {
 }
 
 func opt(command []string, tag *argonautTag, optname string, values ...interface{}) []string {
+	argset := []string{}
+	prejoin := false
+
 	if !tag.SkipName {
 		if tag.LongOption && !tag.ForceShort {
-			command = append(command, `--`+optname)
+			argset = append(argset, `--`+optname)
+			prejoin = true
 		} else {
-			command = append(command, `-`+optname)
+			argset = append(argset, `-`+optname)
 		}
 	}
 
 	for _, v := range values {
-		command = append(command, stringutil.MustString(v))
+		argset = append(argset, stringutil.MustString(v))
+	}
+
+	if prejoin && len(argset) >= 2 {
+		fmt.Printf("%+v joiner %q\n", argset, tag.Joiner)
+
+		command = append(command, argset[0]+tag.Joiner+argset[1])
+		command = append(command, argset[2:]...)
+	} else {
+		command = append(command, argset...)
 	}
 
 	return command
 }
 
-func parseTag(tag string) (argonautTag, error) {
+func parseTag(tag string, defaults *argonautTag) (argonautTag, error) {
 	if tag == `` {
 		return argonautTag{}, nil
 	}
@@ -343,9 +367,9 @@ func parseTag(tag string) (argonautTag, error) {
 	if len(parts) > 0 {
 		argonaut := argonautTag{
 			Options:       strings.Split(parts[0], `|`),
-			Delimiters:    []string{DefaultArgumentDelimiter},
-			KeyPartJoiner: DefaultArgumentKeyPartJoiner,
-			Joiner:        DefaultArgumentKeyValueJoiner,
+			Delimiters:    defaults.Delimiters,
+			KeyPartJoiner: defaults.KeyPartJoiner,
+			Joiner:        defaults.Joiner,
 		}
 
 		for _, tagopt := range parts[1:] {
@@ -382,9 +406,9 @@ func parseTag(tag string) (argonautTag, error) {
 					case `delimiters`:
 						argonaut.Delimiters = strings.Split(v, ``)
 					case `joiner`:
-						argonaut.Joiner = optparts[1]
+						argonaut.Joiner = v
 					case `keyjoiner`:
-						argonaut.KeyPartJoiner = optparts[1]
+						argonaut.KeyPartJoiner = v
 					}
 				}
 			}

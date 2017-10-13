@@ -7,10 +7,11 @@ import (
 )
 
 type ls struct {
-	Command       CommandName `argonaut:"ls"`
+	Command       CommandName `argonaut:"ls,joiner=[*]"`
 	All           bool        `argonaut:"all|a"`
-	BlockSize     int         `argonaut:"block-size,long"`
 	LongFormat    bool        `argonaut:"l"`
+	BlockSize     int         `argonaut:"block-size,long,joiner=[=]"`
+	CoolStuff     string      `argonaut:"cool-stuff,long"`
 	HumanReadable bool        `argonaut:"human-readable|h"`
 	Paths         []string    `argonaut:",positional"`
 }
@@ -22,6 +23,8 @@ func TestBasicMarshal(t *testing.T) {
 		All:           true,
 		LongFormat:    true,
 		HumanReadable: true,
+		BlockSize:     1024,
+		CoolStuff:     `yep`,
 		Paths: []string{
 			`/foo`,
 			`/bar/*.txt`,
@@ -30,7 +33,7 @@ func TestBasicMarshal(t *testing.T) {
 	})
 
 	assert.NoError(err)
-	assert.Equal(`ls --all -l --human-readable /foo /bar/*.txt /baz/`, string(output))
+	assert.Equal(`ls --all -l --block-size=1024 --cool-stuff*yep --human-readable /foo /bar/*.txt /baz/`, string(output))
 	t.Logf(string(output))
 }
 
