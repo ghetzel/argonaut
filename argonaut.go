@@ -164,7 +164,7 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 			utils.SliceEach(field.Value(), func(i int, value interface{}) error {
 				values = append(values, value)
 				return nil
-			}, reflect.Struct)
+			}, reflect.Struct, reflect.Map)
 
 			// arrify and iterate through the field value
 			for _, value := range values {

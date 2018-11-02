@@ -55,10 +55,10 @@ func TestFfmpegMarshal(t *testing.T) {
 					{
 						Stream: `v`,
 						Codec:  `libx264`,
-						Parameters: []string{
-							`-preset`, `veryfast`,
-							`-x264opts`, `keyint=24:min-keyint=24:scenecut=-1`,
-							`-pix_fmt`, `yuv420p`,
+						Parameters: map[string]interface{}{
+							`preset`:   `veryfast`,
+							`x264opts`: `keyint=24:min-keyint=24:scenecut=-1`,
+							`pix_fmt`:  `yuv420p`,
 						},
 					}, {
 						Stream: `a`,

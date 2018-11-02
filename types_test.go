@@ -29,10 +29,10 @@ type GlobalOptions struct {
 }
 
 type CodecOptions struct {
-	ArgName    ArgName  `argonaut:"codec,short"`
-	Stream     string   `argonaut:",suffixprev,delimiters=[:]"`
-	Codec      string   `argonaut:",skipname"`
-	Parameters []string `argonaut:",positional"`
+	ArgName    ArgName                `argonaut:"codec,short"`
+	Stream     string                 `argonaut:",suffixprev,delimiters=[:]"`
+	Codec      string                 `argonaut:",skipname"`
+	Parameters map[string]interface{} `argonaut:",positional,short"`
 }
 
 type MetadataValue struct {
