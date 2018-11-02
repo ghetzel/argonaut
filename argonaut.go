@@ -18,6 +18,7 @@ import (
 	"github.com/ghetzel/go-stockutil/sliceutil"
 	"github.com/ghetzel/go-stockutil/stringutil"
 	"github.com/ghetzel/go-stockutil/typeutil"
+	"github.com/ghetzel/go-stockutil/utils"
 )
 
 var DefaultArgumentDelimiter = ` `
@@ -158,8 +159,15 @@ func generateCommand(v interface{}, toplevel bool) ([]string, string, error) {
 				primaryOpt = fmtCommandWord(field.Name())
 			}
 
+			var values []interface{}
+
+			utils.SliceEach(field.Value(), func(i int, value interface{}) error {
+				values = append(values, value)
+				return nil
+			}, reflect.Struct)
+
 			// arrify and iterate through the field value
-			for _, value := range sliceutil.Sliceify(field.Value()) {
+			for _, value := range values {
 				// CommandName: specifies a named command and options for processing peer fields
 				// ---------------------------------------------------------------------------------
 				if _, ok := value.(CommandName); ok {
@@ -364,7 +372,7 @@ func parseTag(tag string, defaults *argonautTag) (argonautTag, error) {
 
 	if len(parts) > 0 {
 		argonaut := argonautTag{
-			Options:       strings.Split(parts[0], `|`),
+			Options:       sliceutil.CompactString(strings.Split(parts[0], `|`)),
 			Delimiters:    defaults.Delimiters,
 			KeyPartJoiner: defaults.KeyPartJoiner,
 			Joiner:        defaults.Joiner,
