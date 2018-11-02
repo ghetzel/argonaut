@@ -66,8 +66,8 @@ type OutputOptions struct {
 }
 
 type FFMPEG struct {
-	Command CommandName    `argonaut:"ffmpeg"`
-	Global  *GlobalOptions `argonaut:",label=global_options"`
-	Input   *InputOptions  `argonaut:",label=input_file_options"`
-	Output  *OutputOptions `argonaut:",label=output_file_options"`
+	Command        CommandName `argonaut:"ffmpeg"`
+	*GlobalOptions `argonaut:",label=global_options"`
+	*InputOptions  `argonaut:",label=input_file_options"`
+	*OutputOptions `argonaut:",label=output_file_options"`
 }

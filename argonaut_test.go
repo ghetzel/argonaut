@@ -43,13 +43,13 @@ func TestFfmpegMarshal(t *testing.T) {
 	assert := require.New(t)
 
 	cmd := &FFMPEG{
-		Global: &GlobalOptions{
+		GlobalOptions: &GlobalOptions{
 			LogLevel: `error`,
 		},
-		Input: &InputOptions{
+		InputOptions: &InputOptions{
 			URL: `/my/file.avi`,
 		},
-		Output: &OutputOptions{
+		OutputOptions: &OutputOptions{
 			Common: Common{
 				Codecs: []CodecOptions{
 					{
